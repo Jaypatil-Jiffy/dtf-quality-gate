@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eval — Golden Dataset Results</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter",system-ui,sans-serif;color:#111;background:#f8f8f6;line-height:1.5;font-size:13px;padding:24px}
+.container{max-width:1100px;margin:0 auto}
+h1{font-size:20px;font-weight:800;margin-bottom:4px}
+.sub{font-size:12px;color:#999;margin-bottom:20px}
+.summary{display:flex;gap:16px;margin:16px 0;flex-wrap:wrap}
+.stat{padding:16px 24px;border-radius:8px;text-align:center;min-width:120px}
+.stat.green{background:#dcfce7;border:2px solid #16a34a}
+.stat.red{background:#fef2f2;border:2px solid #dc2626}
+.stat.gray{background:#f5f5f0;border:2px solid #ddd}
+.stat .num{font-size:28px;font-weight:800}
+.stat.green .num{color:#16a34a}
+.stat.red .num{color:#dc2626}
+.stat .label{font-size:11px;color:#666;margin-top:2px}
+.cat-bar{margin:8px 0}
+.cat-row{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+.cat-name{width:260px;font-weight:600}
+.bar-bg{flex:1;height:18px;background:#eee;border-radius:4px;overflow:hidden;max-width:200px}
+.bar-fill{height:100%;border-radius:4px}
+.bar-fill.full{background:#16a34a}
+.bar-fill.partial{background:#d97706}
+.bar-fill.zero{background:#dc2626}
+.cat-pct{font-weight:700;width:50px;text-align:right}
+table{width:100%;border-collapse:collapse;margin-top:16px;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;overflow:hidden}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid rgba(0,0,0,.06);font-size:12px}
+th{background:#f5f5f0;font-size:10px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.3px}
+tr.caught{} tr.missed{background:#fef2f2}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+.badge.pass{background:#dcfce7;color:#16a34a}
+.badge.fail{background:#fef2f2;color:#dc2626}
+.badge.caught{background:#dcfce7;color:#16a34a}
+.badge.missed{background:#fef2f2;color:#dc2626}
+.comment{font-size:11px;color:#666;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.checks{font-size:10px;color:#555}
+.no-data{text-align:center;padding:40px;color:#999;font-size:14px}
+a{color:#2563eb;text-decoration:none}
+a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Golden Dataset Eval Results</h1>
+  <p class="sub">21 real claim images scored against the current pipeline. <a href="/">Back to analyzer</a></p>
+  <div id="content"></div>
+</div>
+<script>
+var rawData = {{ data | safe }};
+
+function render(data) {
+  var el = document.getElementById('content');
+  if (!data || !data.results) {
+    el.innerHTML = '<div class="no-data">No eval results found. Run: <code>python run_eval.py</code></div>';
+    return;
+  }
+
+  var results = data.results.filter(function(r) { return r.status !== 'skip' && r.status !== 'error'; });
+  var total = results.length;
+  var caught = results.filter(function(r) { return r.caught; }).length;
+  var missed = total - caught;
+  var pct = total ? Math.round(caught / total * 100) : 0;
+
+  var h = '';
+
+  h += '<div class="summary">';
+  h += '<div class="stat green"><div class="num">' + caught + '/' + total + '</div><div class="label">Caught</div></div>';
+  h += '<div class="stat red"><div class="num">' + missed + '</div><div class="label">Missed</div></div>';
+  h += '<div class="stat gray"><div class="num">' + pct + '%</div><div class="label">Catch Rate</div></div>';
+  h += '<div class="stat gray"><div class="num">' + (data.model || '?').split('/').pop() + '</div><div class="label">Model</div></div>';
+  h += '</div>';
+
+  // Per-category bars
+  var cats = data.summary || {};
+  var catKeys = Object.keys(cats).sort();
+  h += '<div class="cat-bar">';
+  for (var i = 0; i < catKeys.length; i++) {
+    var c = cats[catKeys[i]];
+    var p = c.total ? Math.round(c.caught / c.total * 100) : 0;
+    var cls = p === 100 ? 'full' : p > 0 ? 'partial' : 'zero';
+    h += '<div class="cat-row">';
+    h += '<div class="cat-name">' + esc(catKeys[i]) + '</div>';
+    h += '<div class="bar-bg"><div class="bar-fill ' + cls + '" style="width:' + p + '%"></div></div>';
+    h += '<div class="cat-pct">' + c.caught + '/' + c.total + '</div>';
+    h += '</div>';
+  }
+  h += '</div>';
+
+  // Results table
+  h += '<table><thead><tr>';
+  h += '<th>Row</th><th>Category</th><th>Verdict</th><th>Result</th><th>SW Flagged</th><th>VLM Checks</th><th>Score</th><th>Customer Comment</th><th>Time</th>';
+  h += '</tr></thead><tbody>';
+
+  for (var i = 0; i < results.length; i++) {
+    var r = results[i];
+    var cls = r.caught ? 'caught' : 'missed';
+    h += '<tr class="' + cls + '">';
+    h += '<td>' + r.row + '</td>';
+    h += '<td>' + esc(r.subcategory || '') + '</td>';
+    h += '<td><span class="badge ' + (r.verdict === 'FAIL' ? 'fail' : 'pass') + '">' + esc(r.verdict || '?') + '</span></td>';
+    h += '<td><span class="badge ' + cls + '">' + (r.caught ? 'CAUGHT' : 'MISSED') + '</span></td>';
+    h += '<td><span class="checks">' + esc((r.sw_flagged || []).join(', ') || 'none') + '</span></td>';
+
+    var vlmStr = '';
+    if (r.vlm_checks) {
+      var vk = Object.keys(r.vlm_checks);
+      for (var j = 0; j < vk.length; j++) {
+        var st = r.vlm_checks[vk[j]];
+        vlmStr += vk[j].split('_')[0] + ':' + (st || '?') + ' ';
+      }
+    }
+    h += '<td><span class="checks">' + esc(vlmStr || 'none') + '</span></td>';
+    h += '<td>' + (r.vlm_score != null ? r.vlm_score : '?') + '</td>';
+    h += '<td><span class="comment" title="' + esc(r.comment || '') + '">' + esc((r.comment || '').substring(0, 60)) + '</span></td>';
+    h += '<td>' + (r.elapsed_s || '?') + 's</td>';
+    h += '</tr>';
+  }
+
+  h += '</tbody></table>';
+  el.innerHTML = h;
+}
+
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+render(rawData);
+</script>
+</body>
+</html>

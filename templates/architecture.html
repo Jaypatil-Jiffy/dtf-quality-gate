@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Architecture — DTF Image Quality Gate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f8f6;--bg2:#fff;--bd:rgba(0,0,0,.08);--t1:#111;--t2:#555;--t3:#999;
+--green:#16a34a;--greenBg:#dcfce7;--red:#dc2626;--redBg:#fef2f2;
+--amber:#d97706;--amberBg:#fef3c7;--blue:#2563eb;--blueBg:#dbeafe;
+--purple:#7c3aed;--purpleBg:#ede9fe;--teal:#0d9488;--tealBg:#ccfbf1;
+--font:"Inter",system-ui,sans-serif;--mono:"SF Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--t1);background:var(--bg);line-height:1.5;font-size:13px;padding:24px}
+.container{max-width:1100px;margin:0 auto}
+h1{font-size:22px;font-weight:800;margin-bottom:2px}
+.sub{font-size:12px;color:var(--t3);margin-bottom:24px}
+a{color:var(--blue);text-decoration:none}
+
+/* Flow */
+.flow{display:flex;align-items:center;gap:8px;margin:16px 0;flex-wrap:wrap}
+.flow-box{padding:10px 16px;border-radius:8px;font-size:12px;font-weight:600;text-align:center;min-width:100px}
+.flow-arrow{font-size:18px;color:var(--t3)}
+
+/* Sections */
+.stage{margin:24px 0;padding:20px;background:var(--bg2);border:1px solid var(--bd);border-radius:10px}
+.stage-hdr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.stage-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.stage-title{font-size:15px;font-weight:700}
+.stage-meta{font-size:11px;color:var(--t3);margin-left:auto;font-family:var(--mono)}
+
+.gate-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:8px}
+.gate-box{padding:12px 14px;border-radius:8px;border-left:4px solid;font-size:12px}
+.gate-box h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px}
+.gate-box p{color:var(--t2);font-size:11px;line-height:1.5;margin-bottom:4px}
+.gate-box .logic{font-family:var(--mono);font-size:10px;background:#f5f5f0;padding:6px 8px;border-radius:4px;margin-top:6px;color:var(--t2)}
+.gate-box .tag{display:inline-block;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:600;margin-right:4px}
+
+.gate-box.sw{border-left-color:var(--green)}
+.gate-box.sw h4{color:var(--green)}
+.gate-box.vlm{border-left-color:var(--purple)}
+.gate-box.vlm h4{color:var(--purple)}
+.gate-box.hard{border-left-color:var(--red)}
+.gate-box.hard h4{color:var(--red)}
+.gate-box.info{border-left-color:var(--blue)}
+.gate-box.info h4{color:var(--blue)}
+.gate-box.vendor{border-left-color:var(--amber)}
+.gate-box.vendor h4{color:var(--amber)}
+
+.decision-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}
+.decision-table th,.decision-table td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--bd)}
+.decision-table th{font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase;background:#f9f9f6}
+
+.prompt-box{background:#1e1e2e;color:#cdd6f4;padding:14px;border-radius:8px;font-family:var(--mono);font-size:11px;line-height:1.6;white-space:pre-wrap;max-height:400px;overflow-y:auto;margin:8px 0}
+.prompt-section{margin:16px 0}
+.prompt-section summary{font-size:13px;font-weight:700;cursor:pointer;padding:8px 0}
+.prompt-section summary:hover{color:var(--blue)}
+
+.metrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:12px 0}
+.metric{padding:12px;border-radius:8px;text-align:center;background:var(--bg)}
+.metric .num{font-size:24px;font-weight:800}
+.metric .label{font-size:10px;color:var(--t3);margin-top:2px}
+.metric.green .num{color:var(--green)}
+.metric.red .num{color:var(--red)}
+.metric.blue .num{color:var(--blue)}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>DTF Image Quality Gate — Architecture</h1>
+<p class="sub">v8.1 · <a href="/">Analyzer</a> · <a href="/eval">Eval Dashboard</a> · Last eval: 18/21 caught (86%)</p>
+
+<!-- Pipeline Flow -->
+<div class="flow">
+  <div class="flow-box" style="background:var(--blueBg);border:1px solid var(--blue)">Upload Image</div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box" style="background:var(--tealBg);border:1px solid var(--teal)">BG Removal<br><span style="font-size:9px;font-weight:400">BiRefNet v2</span></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box" style="background:var(--greenBg);border:1px solid var(--green)">Stage 1<br><span style="font-size:9px;font-weight:400">10 SW Gates</span></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box" style="background:var(--purpleBg);border:1px solid var(--purple)">Stage 2<br><span style="font-size:9px;font-weight:400">VLM (4 checks + 7 validations)</span></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box" style="background:var(--redBg);border:1px solid var(--red)">Decision<br><span style="font-size:9px;font-weight:400">Hard blocks > VLM > Advisory</span></div>
+  <span class="flow-arrow">→</span>
+  <div class="flow-box" style="background:var(--amberBg);border:1px solid var(--amber)">Report<br><span style="font-size:9px;font-weight:400">LLM Writer</span></div>
+</div>
+
+<!-- Eval Metrics -->
+<div class="metrics">
+  <div class="metric green"><div class="num">86%</div><div class="label">Catch Rate (18/21)</div></div>
+  <div class="metric blue"><div class="num">10</div><div class="label">SW Gates</div></div>
+  <div class="metric blue"><div class="num">4</div><div class="label">VLM Checks</div></div>
+  <div class="metric blue"><div class="num">7</div><div class="label">VLM Validations</div></div>
+  <div class="metric"><div class="num">3</div><div class="label">Vendor-Only</div></div>
+  <div class="metric"><div class="num">8</div><div class="label">VLM Models</div></div>
+</div>
+
+<!-- Stage 0: BG Removal -->
+<div class="stage">
+  <div class="stage-hdr">
+    <div class="stage-dot" style="background:var(--teal)"></div>
+    <div class="stage-title">Stage 0 — Background Removal</div>
+    <div class="stage-meta">BiRefNet v2 · fal.ai · ~3s</div>
+  </div>
+  <div class="gate-grid">
+    <div class="gate-box sw">
+      <h4>BiRefNet v2 (General Use Heavy)</h4>
+      <p>Removes background from customer image. Uses bilateral reference framework for high-resolution segmentation. Runs when "BG Removal" toggle is ON.</p>
+      <div class="logic">API: fal-ai/birefnet/v2
+Model: General Use (Heavy)
+Resolution: 1024×1024
+Foreground refinement: ON
+Output: PNG with alpha channel</div>
+    </div>
+  </div>
+</div>
+
+<!-- Stage 1: Software Gates -->
+<div class="stage">
+  <div class="stage-hdr">
+    <div class="stage-dot" style="background:var(--green)"></div>
+    <div class="stage-title">Stage 1 — Software Gates (10 deterministic checks)</div>
+    <div class="stage-meta">$0 · <100ms · pixel math only</div>
+  </div>
+  <p style="font-size:12px;color:var(--t2);margin-bottom:12px">These gates run pixel-level analysis. They INFORM but don't decide — the VLM validates each flag.</p>
+  <div class="gate-grid">
+
+    <div class="gate-box hard">
+      <h4>BG-1 — No Alpha Channel</h4>
+      <p>If BG removal was ordered but the image has no alpha channel → flag. Binary check.</p>
+      <div class="logic">flag = (bg_removal_on AND img.mode NOT in RGBA/LA/PA)
+confidence: 98% | authority: VLM-adjudicated
+BG removal OFF → skipped</div>
+    </div>
+
+    <div class="gate-box sw">
+      <h4>BG-2 — White BG Corners</h4>
+      <p>Samples 5% corner margins. If >92% of corner pixels are opaque white → flag as possible remaining background.</p>
+      <div class="logic">corners = 4 × (5% margin area)
+white = R>240, G>240, B>240, A>200
+flag = (white_pct > 92%)
+FP rules: white design element, near-white on transparent</div>
+    </div>
+
+    <div class="gate-box sw">
+      <h4>BG-3 — Content Border Opacity</h4>
+      <p>Finds the content boundary (where design meets transparency via erosion). Checks what % of border pixels have alpha below 60% — these print as faint white halo.</p>
+      <div class="logic">content_border = content_mask AND NOT eroded_mask
+low_opacity = border_alpha < 153 (60%)
+flag = (low_opacity_pct > 15% AND count > 50)
+Physics: alpha < 60% = faint white ink deposit</div>
+    </div>
+
+    <div class="gate-box sw">
+      <h4>BG-4 — Ghost Pixels</h4>
+      <p>DPI-scaled dilation creates safe zone around main content. Orphan pixel clusters outside = ghost candidates.</p>
+      <div class="logic">dilated = cv2.dilate(content, kernel, iterations=3)
+ghost = component NOT overlapping dilated zone
+flag = (any cluster < 5px found outside safe zone)
+FP rule: intentional glow/sparkle effects</div>
+    </div>
+
+    <div class="gate-box hard">
+      <h4>LR-1 — DPI / Resolution Check</h4>
+      <p>DPI = pixels ÷ print inches. Below 72 = HARD FAIL (physics, no VLM override). 72-150 = borderline.</p>
+      <div class="logic">dpi = min(width_px / print_width_in, height_px / print_height_in)
+< 72 → HARD FAIL (visible pixelation guaranteed)
+72-150 → borderline flag
+≥ 150 → pass
+AUTHORITY: Hard block — no VLM override</div>
+    </div>
+
+    <div class="gate-box sw">
+      <h4>LR-2 — Blur Detection</h4>
+      <p>Laplacian variance on content region only (not mask boundary). Low variance = blurry image.</p>
+      <div class="logic">laplacian = cv2.Laplacian(gray, CV_64F)
+variance = laplacian[content_mask > 0].var()
+< 3 → definite blur | 3-10 → borderline | > 50 → sharp
+FP rules: shallow DOF, gradient/soft-brush art</div>
+    </div>
+
+    <div class="gate-box sw">
+      <h4>TL-1 — Thin Line Detection</h4>
+      <p>Finds ISOLATED narrow strokes (< 2px) separate from main design, surrounded by transparency. These can't hold adhesive powder.</p>
+      <div class="logic">connected_components = cv2.connectedComponentsWithStats()
+skip if component area > 10% of total (= main design)
+measure max_width via distance_transform
+flag if: max_width < 2px AND aspect_ratio > 3 (elongated)
+NOT: borders of filled shapes, connected text</div>
+    </div>
+
+    <div class="gate-box info">
+      <h4>CS-1 — CMYK Color Shift (Advisory)</h4>
+      <p>Gamut-risk heuristic: identifies saturated colors (neon blue, vivid green, bright red) that will shift during CMYK conversion. Info-only, never flags.</p>
+      <div class="logic">risky_blue = hue 200-270° AND sat > 60% AND max > 100
+risky_green = hue 80-170° AND sat > 60%
+risky_neon = sat > 85% AND max > 200
+estimated ΔE based on saturation level
+AUTHORITY: Advisory only — never triggers FAIL
+Production: needs ICC profile for accuracy</div>
+    </div>
+
+    <div class="gate-box sw">
+      <h4>JE-1 — Jagged Edge Detection</h4>
+      <p>Angle-based analysis on contour points. Detects staircase patterns from bad upscaling.</p>
+      <div class="logic">contours = cv2.findContours(CHAIN_APPROX_NONE)
+angle_changes = arctan2(dy, dx) between consecutive points
+jagged = angle_change between 45°-135° (right-angle steps)
+flag = (jaggedness_ratio > 0.25 AND total_points > 100)
+FP rule: intentional pixel art / 8-bit style</div>
+    </div>
+
+    <div class="gate-box sw">
+      <h4>QR-1 — QR Code Scan</h4>
+      <p>Detects and decodes QR codes using OpenCV QRCodeDetector. Verifies readability.</p>
+      <div class="logic">detector = cv2.QRCodeDetector()
+decoded, points, straight = detectAndDecode(gray)
+Reports: QR found/not found, decoded data, is_url
+Multi-QR detection via detectAndDecodeMulti()</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Stage 2: VLM -->
+<div class="stage">
+  <div class="stage-hdr">
+    <div class="stage-dot" style="background:var(--purple)"></div>
+    <div class="stage-title">Stage 2 — VLM Assessment (4 checks + 7 validations)</div>
+    <div class="stage-meta">~$0.01/img · 5-30s · fal.ai any-llm/vision</div>
+  </div>
+  <p style="font-size:12px;color:var(--t2);margin-bottom:12px">VLM receives TWO images (original + processed) and all SW gate results. It performs visual checks AND validates/overrides SW flags.</p>
+
+  <div style="font-size:12px;font-weight:700;margin:12px 0 6px;color:var(--purple)">VLM-ONLY CHECKS (visual assessment)</div>
+  <div class="gate-grid">
+
+    <div class="gate-box vlm">
+      <h4>UP-1 — Upscaling + Design Integrity</h4>
+      <p>Compares original vs processed. Detects text corruption, face distortion, sharpening halos, objects incorrectly added/removed by AI upscaler.</p>
+      <div class="logic">Compares Image 1 (original) vs Image 2 (processed)
+FAIL: garbled text, melted faces, halo artifacts
+FAIL: objects added/removed not in original
+Customer: "number 1 in area code is messed up"
+Customer: "black ink smudges on the flag"</div>
+    </div>
+
+    <div class="gate-box vlm">
+      <h4>BR-1 — BG Removal Quality</h4>
+      <p>6 specific defect sub-categories from BG removal research (Sprint 1/2).</p>
+      <div class="logic">a. ENCLOSED TEXT RESIDUAL — BG inside O,D,B,A,R,P,Q
+b. EDGE HALO / FRINGING — glow ring around subject
+c. HAIR / FINE-DETAIL LOSS — flyaway strands clipped
+d. INCOMPLETE REMOVAL — BG patches remaining
+e. COLOR BLEED — BG color into subject edges
+f. SHADOW ARTIFACTS — cast shadow retained
+Customer: "The L in Michael Jordan was removed"
+Customer: "white background behind the tree"</div>
+    </div>
+
+    <div class="gate-box vlm">
+      <h4>ST-1 — Semi-Transparency (DTF Physics)</h4>
+      <p>DTF CANNOT reproduce gradual transparency. Any glow/smoke/shadow with partial opacity = white/gray haze on garment. Intent does NOT matter.</p>
+      <div class="logic">FAIL: glow/smoke effects with gradual fade
+FAIL: neon outlines fading to nothing
+FAIL: drop shadows with transparency
+FAIL: faded/feathered edges to transparent
+FAIL: cloud/fog semi-transparent areas
+PASS: only if ALL elements fully opaque
+Customer: "Shows white gray and brown after pressed"
+#1 source of "doesn't look like what I ordered"</div>
+    </div>
+
+    <div class="gate-box vlm">
+      <h4>TL-VLM — Thin Lines (Visual)</h4>
+      <p>Isolated thin elements SEPARATE from main design, SURROUNDED by transparency after BG removal, < 2px. Can't hold adhesive powder.</p>
+      <div class="logic">IS thin line: separate stroke floating in transparent space
+IS thin line: outline separated from fill after BG removal
+NOT thin line: edges of filled shapes in main design
+NOT thin line: connected text (even if strokes thin)
+Customer: "yellow line didn't press to the shirt"
+Customer: "no powder on the film in some areas"</div>
+    </div>
+  </div>
+
+  <div style="font-size:12px;font-weight:700;margin:16px 0 6px;color:var(--green)">SW GATE VALIDATIONS (VLM confirms or overrides each SW flag)</div>
+  <table class="decision-table">
+    <tr><th>SW Gate</th><th>VLM Validates Against</th><th>Can Override?</th></tr>
+    <tr><td>BG-2 White Corners</td><td>FP-BG2-1: white design element, FP-BG2-2: near-white on transparent</td><td>Yes</td></tr>
+    <tr><td>BG-3 Border Opacity</td><td>FP-BG3-1: watercolor/airbrush edges, FP-BG3-2: anti-aliased text</td><td>Yes</td></tr>
+    <tr><td>BG-4 Ghost Pixels</td><td>FP-BG4-1: intentional glow/sparkle effects</td><td>Yes</td></tr>
+    <tr><td>LR-2 Blur</td><td>FP-LR2-1: shallow DOF, FP-LR2-2: gradient/soft-brush art</td><td>Yes</td></tr>
+    <tr><td>TL-1 Thin Lines</td><td>Design-intent thin strokes the customer submitted</td><td>Yes</td></tr>
+    <tr><td>JE-1 Jagged Edges</td><td>FP-JE1-1: intentional pixel art / 8-bit style</td><td>Yes</td></tr>
+    <tr><td>QR-1 QR Code</td><td>QR intact, scannable, not distorted</td><td>Yes</td></tr>
+  </table>
+</div>
+
+<!-- Decision Hierarchy -->
+<div class="stage">
+  <div class="stage-hdr">
+    <div class="stage-dot" style="background:var(--red)"></div>
+    <div class="stage-title">Decision Hierarchy</div>
+    <div class="stage-meta">Hard blocks > VLM checks > VLM-adjudicated > Advisory</div>
+  </div>
+  <table class="decision-table">
+    <tr><th>Tier</th><th>What</th><th>Logic</th><th>Can Override?</th></tr>
+    <tr style="background:var(--redBg)"><td><b>1. Hard Block</b></td><td>LR-1 < 72 DPI</td><td>Physics constraint. Guaranteed visible pixelation.</td><td>No — always FAIL</td></tr>
+    <tr style="background:var(--purpleBg)"><td><b>2. VLM-Only Checks</b></td><td>UP-1, BR-1, ST-1, TL-VLM</td><td>VLM detected defect with medium/high/critical severity</td><td>No — VLM is the authority</td></tr>
+    <tr><td><b>3. VLM-Adjudicated</b></td><td>BG-1..4, LR-2, TL-1, JE-1</td><td>SW flag + VLM confirm = FAIL. SW flag + VLM override = PASS.</td><td>VLM can override SW false positives</td></tr>
+    <tr style="background:var(--blueBg)"><td><b>4. Advisory</b></td><td>CS-1 CMYK</td><td>Informational only. Shows risk but never triggers FAIL.</td><td>N/A — info only</td></tr>
+  </table>
+</div>
+
+<!-- Models -->
+<div class="stage">
+  <div class="stage-hdr">
+    <div class="stage-dot" style="background:var(--blue)"></div>
+    <div class="stage-title">VLM Models Available (8)</div>
+    <div class="stage-meta">Retry: 3 attempts · Fallback chain · Circuit breaker</div>
+  </div>
+  <table class="decision-table">
+    <tr><th>Model</th><th>Provider</th><th>Speed</th><th>Tier</th><th>Fallback Chain</th></tr>
+    <tr><td><b>Gemini 2.5 Flash</b></td><td>Google</td><td>~5s</td><td>Standard (default)</td><td>Primary → Sonnet → Flash Lite</td></tr>
+    <tr><td>Gemini 2.5 Flash Lite</td><td>Google</td><td>~5s</td><td>Standard</td><td>Emergency fallback</td></tr>
+    <tr><td>Gemini 2.5 Pro</td><td>Google</td><td>~5s</td><td>Premium</td><td>—</td></tr>
+    <tr><td>Claude Sonnet 4.5</td><td>Anthropic</td><td>~25s</td><td>Premium</td><td>Secondary fallback</td></tr>
+    <tr><td>Claude Haiku 4.5</td><td>Anthropic</td><td>~18s</td><td>Premium</td><td>—</td></tr>
+    <tr><td>GPT-5 Mini</td><td>OpenAI</td><td>~5s</td><td>Premium</td><td>—</td></tr>
+    <tr><td>GPT-4.1</td><td>OpenAI</td><td>~10s</td><td>Premium</td><td>—</td></tr>
+    <tr><td>Grok 4 Fast</td><td>xAI</td><td>~10s</td><td>Premium</td><td>—</td></tr>
+  </table>
+  <p style="font-size:11px;color:var(--t2);margin-top:8px">Default: 2 fast models (Flash + Flash Lite). "Premium models" checkbox adds all 8. Retry: 3 attempts with exponential backoff (1s, 4s, 15s). Circuit breaker: 8 failures in 5min → 60s cooldown.</p>
+</div>
+
+<!-- Vendor-Only -->
+<div class="stage">
+  <div class="stage-hdr">
+    <div class="stage-dot" style="background:var(--amber)"></div>
+    <div class="stage-title">Vendor-Only Checks (not automated)</div>
+    <div class="stage-meta">Human review required</div>
+  </div>
+  <div class="gate-grid">
+    <div class="gate-box vendor"><h4>Trimming / Sizing</h4><p>Image fits ordered canvas size and aspect ratio. Not stretched or cropped incorrectly.</p></div>
+    <div class="gate-box vendor"><h4>Text & Naming Accuracy</h4><p>Spelling, placement, formatting, color matches customer request. Verify across all images in order.</p></div>
+    <div class="gate-box vendor"><h4>Color Matching</h4><p>Exact color codes if customer specified them (e.g., "navy blue #063970"). Colors match across all redraws.</p></div>
+  </div>
+</div>
+
+<!-- VLM Prompt -->
+<div class="stage">
+  <div class="stage-hdr">
+    <div class="stage-dot" style="background:var(--purple)"></div>
+    <div class="stage-title">VLM System Prompt (full text)</div>
+  </div>
+  <details class="prompt-section">
+    <summary>Click to expand full VLM system prompt</summary>
+    <div class="prompt-box" id="promptBox"></div>
+  </details>
+</div>
+
+</div>
+<script>
+document.getElementById('promptBox').textContent = {{ prompt_text | safe }};
+</script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DTF Image Quality Gate</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f8f6;--bg2:#fff;--bd:rgba(0,0,0,.08);--t1:#111;--t2:#555;--t3:#999;
+--green:#16a34a;--greenBg:#dcfce7;--red:#dc2626;--redBg:#fef2f2;
+--amber:#d97706;--amberBg:#fef3c7;--blue:#2563eb;--blueBg:#dbeafe;
+--font:"Inter",system-ui,sans-serif;--mono:"SF Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);color:var(--t1);background:var(--bg);line-height:1.5;font-size:13px}
+.container{max-width:960px;margin:0 auto;padding:24px 16px}
+h1{font-size:20px;font-weight:800;text-align:center;margin-bottom:4px}
+.sub-title{font-size:12px;color:var(--t3);text-align:center;margin-bottom:20px}
+
+.upload-row{display:flex;gap:12px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.file-btn{padding:10px 20px;background:var(--t1);color:#fff;border:none;border-radius:8px;
+font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)}
+.file-btn:hover{background:#333}
+.file-name{font-size:13px;color:var(--t2)}
+.preview{max-height:120px;border-radius:8px;border:1px solid var(--bd);margin-top:8px}
+
+.opts{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:12px 0;font-size:12px}
+.opts label{display:flex;align-items:center;gap:4px;cursor:pointer}
+.opts input[type=number]{width:50px;padding:4px;border:1px solid var(--bd);border-radius:4px;font-size:12px;text-align:center}
+.opts input[type=checkbox]{width:15px;height:15px}
+
+.go-btn{display:block;width:100%;padding:12px;border:none;border-radius:8px;
+background:var(--t1);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);margin:8px 0}
+.go-btn:hover:not(:disabled){background:#222}
+.go-btn:disabled{opacity:.3;cursor:not-allowed}
+
+.progress{height:3px;background:#eee;border-radius:2px;overflow:hidden;margin:6px 0;display:none}
+.progress-fill{height:100%;background:var(--t1);width:0%;transition:width .4s}
+.status-text{font-size:11px;color:var(--t3);text-align:center;display:none}
+.err{padding:10px;background:var(--redBg);border:1px solid #fca5a5;border-radius:8px;color:var(--red);font-size:12px;margin:8px 0}
+
+.results{display:none}.results.show{display:block}
+
+.verdict-banner{display:flex;align-items:center;justify-content:center;gap:24px;padding:24px;border-radius:8px;margin:16px 0}
+.verdict-banner.pass{background:var(--greenBg);border:2px solid var(--green)}
+.verdict-banner.fail{background:var(--redBg);border:2px solid var(--red)}
+.verdict-banner.unknown{background:#f5f5f0;border:2px solid #ddd}
+.verdict-text{font-size:48px;font-weight:800;line-height:1}
+.verdict-banner.pass .verdict-text{color:var(--green)}
+.verdict-banner.fail .verdict-text{color:var(--red)}
+.verdict-banner.unknown .verdict-text{color:var(--t3);font-size:28px}
+.score-box{font-size:28px;font-weight:800;width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:4px solid}
+
+.images-row{display:flex;gap:12px;margin:12px 0}
+.images-row img{max-height:160px;border-radius:8px;border:1px solid var(--bd)}
+.img-label{font-size:10px;color:var(--t3);text-align:center;margin-top:4px;font-weight:600;text-transform:uppercase}
+
+.section-title{font-size:13px;font-weight:700;margin:16px 0 8px}
+.gate{padding:8px 12px;border-radius:6px;margin-bottom:4px;font-size:12px;border-left:4px solid}
+.gate.fail{background:var(--redBg);border-left-color:var(--red)}
+.gate.pass{background:#f4faf4;border-left-color:var(--green)}
+.gate.info{background:var(--blueBg);border-left-color:var(--blue)}
+.gate.skip{background:#fafaf8;border-left-color:#ddd}
+.gate.warn{background:var(--amberBg);border-left-color:var(--amber)}
+.gate-id{font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+.gate-detail{color:var(--t2);font-size:11px;margin-top:2px}
+
+.vlm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin:8px 0}
+.vlm-card{padding:10px;border-radius:8px;border:1px solid var(--bd);font-size:11px}
+.vlm-card.pass{background:var(--greenBg);border-color:var(--green)}
+.vlm-card.fail{background:var(--redBg);border-color:var(--red)}
+.vlm-card.na{background:#f9f9f6;border-color:#ddd}
+.vlm-card h4{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px}
+
+.report-box{font-size:12px;line-height:1.7;white-space:pre-wrap;padding:12px;background:#f9f9f6;border:1px solid var(--bd);border-radius:8px;margin:8px 0;max-height:400px;overflow-y:auto}
+
+.cmp-wrap{overflow-x:auto;margin:8px 0}
+table.cmp{width:100%;border-collapse:collapse;font-size:11px;background:var(--bg2);border:1px solid var(--bd);border-radius:8px}
+table.cmp th,table.cmp td{padding:6px 10px;text-align:center;border-bottom:1px solid var(--bd)}
+table.cmp th{background:#f5f5f0;font-size:10px;font-weight:600;color:var(--t3);text-transform:uppercase}
+table.cmp td:first-child{text-align:left;font-weight:600}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%}
+.dot.p{background:var(--green)}.dot.f{background:var(--red)}.dot.e{background:#ccc}
+
+.perf{display:flex;gap:14px;font-size:11px;color:var(--t3);margin:12px 0;flex-wrap:wrap}
+.perf b{color:var(--t1);font-family:var(--mono)}
+
+.json-btn{font-size:11px;color:var(--t3);cursor:pointer;margin:8px 0;font-weight:600}
+.json-btn:hover{color:var(--t2)}
+.json-box{display:none;padding:10px;background:#1e1e2e;color:#cdd6f4;border-radius:8px;font-family:var(--mono);font-size:10px;overflow:auto;max-height:300px;white-space:pre;margin:4px 0}
+.json-box.show{display:block}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>DTF Image Quality Gate</h1>
+<p class="sub-title">Print QA tool · v8.1 · <a href="/eval" style="color:var(--blue)">Eval Dashboard</a> · <a href="/architecture" style="color:var(--blue)">Architecture</a></p>
+
+<div class="upload-row">
+  <button class="file-btn" onclick="document.getElementById('fileInput').click()">Choose Image</button>
+  <span class="file-name" id="fileName">No file selected</span>
+  <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)">
+</div>
+<img id="preview" class="preview" style="display:none">
+
+<div class="opts">
+  <label>W <input type="number" id="pw" value="10" min="1" max="36" step=".5"> in</label>
+  <label>H <input type="number" id="ph" value="10" min="1" max="36" step=".5"> in</label>
+  <label><input type="checkbox" id="bgToggle" checked> BG Removal (BiRefNet v2)</label>
+  <label><input type="checkbox" id="premiumToggle"> Premium models (slower)</label>
+</div>
+
+<button class="go-btn" id="goBtn" disabled onclick="analyze()">Analyze Image</button>
+<div class="progress" id="pbar"><div class="progress-fill" id="pfill"></div></div>
+<div class="status-text" id="statusText"></div>
+
+<div class="results" id="results"></div>
+</div>
+
+<script>
+var selectedFile=null;
+
+function handleFile(input){
+  var f=input.files[0];
+  if(!f)return;
+  selectedFile=f;
+  document.getElementById('fileName').textContent=f.name+' ('+Math.round(f.size/1024)+'KB)';
+  document.getElementById('goBtn').disabled=false;
+  try{
+    var r=new FileReader();
+    r.onload=function(e){var p=document.getElementById('preview');p.src=e.target.result;p.style.display='block'};
+    r.readAsDataURL(f);
+  }catch(e){}
+}
+
+async function analyze(){
+  if(!selectedFile)return;
+  var btn=document.getElementById('goBtn');
+  var pbar=document.getElementById('pbar');
+  var pfill=document.getElementById('pfill');
+  var st=document.getElementById('statusText');
+  var res=document.getElementById('results');
+
+  btn.disabled=true;btn.textContent='Running...';
+  pbar.style.display='block';st.style.display='block';
+  pfill.style.width='5%';st.textContent='Uploading + running analysis...';
+  res.classList.remove('show');res.innerHTML='';
+
+  var iv=setInterval(function(){var w=parseFloat(pfill.style.width);if(w<85)pfill.style.width=(w+2)+'%'},2000);
+
+  var fd=new FormData();
+  fd.append('file',selectedFile);
+  fd.append('print_width',document.getElementById('pw').value);
+  fd.append('print_height',document.getElementById('ph').value);
+  fd.append('bg_removal',document.getElementById('bgToggle').checked?'1':'0');
+  fd.append('models',document.getElementById('premiumToggle').checked?'all':'');
+
+  try{
+    var r=await fetch('/analyze',{method:'POST',body:fd});
+    clearInterval(iv);pfill.style.width='100%';st.textContent='Done!';
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    var d=await r.json();
+    if(d.error){throw new Error(d.error)}
+    renderResults(d);
+  }catch(e){
+    clearInterval(iv);
+    res.innerHTML='<div class="err">'+esc(e.message)+'</div>';
+    res.classList.add('show');
+  }finally{
+    btn.disabled=false;btn.textContent='Analyze Image';
+    setTimeout(function(){pbar.style.display='none';st.style.display='none'},1500);
+  }
+}
+
+function renderResults(d){
+  try{_render(d)}catch(e){
+    console.error(e);
+    var res=document.getElementById('results');
+    res.innerHTML='<div class="err">Render error: '+esc(e.message)+'</div><pre class="json-box show">'+esc(JSON.stringify(d,null,2))+'</pre>';
+    res.classList.add('show');
+  }
+}
+
+function _render(d){
+  var h='';
+  var s1=d.stage1_sw_gates||{};
+  var bg=d.bg_removal||{};
+  var info=d.image_info||{};
+  var perf=d.performance||{};
+  var mr=d.model_results||{};
+  var models=d.models_run||[];
+  var fv=d.final_verdict||{};
+  var primary=models[0]||'';
+  var pr=mr[primary]||{};
+  var pa=pr.assessment||{};
+
+  var verdict=fv.verdict||pa.overall_verdict||'UNKNOWN';
+  var score=fv.vlm_score||pa.print_readiness_score;
+  var vCls=verdict==='PASS'?'pass':verdict==='FAIL'?'fail':'unknown';
+  var sColor=typeof score==='number'?(score>=80?'var(--green)':score>=50?'var(--amber)':'var(--red)'):'var(--t3)';
+
+  // Verdict
+  h+='<div class="verdict-banner '+vCls+'">';
+  h+='<div class="verdict-text">'+esc(verdict)+'</div>';
+  if(typeof score==='number'){
+    h+='<div class="score-box" style="border-color:'+sColor+';color:'+sColor+'">'+score+'</div>';
+  }
+  h+='</div>';
+
+  // Reasons
+  var reasons=fv.reasons||[];
+  if(reasons.length){
+    h+='<div style="text-align:center;font-size:11px;color:var(--t2);margin:-8px 0 12px">';
+    for(var i=0;i<reasons.length;i++)h+=esc(reasons[i])+'<br>';
+    h+='</div>';
+  }
+
+  // Images
+  var upUrl=(d.uploaded_file||{}).url;
+  var bgUrl=bg.local_url;
+  if(upUrl||bgUrl){
+    h+='<div class="images-row">';
+    if(upUrl)h+='<div><img src="'+esc(upUrl)+'"><div class="img-label">Original</div></div>';
+    if(bgUrl)h+='<div><img src="'+esc(bgUrl)+'"><div class="img-label">BG Removed</div></div>';
+    if(bg.status==='error')h+='<div class="err" style="margin:auto">BG removal failed: '+esc(bg.error||'')+'</div>';
+    h+='</div>';
+  }
+
+  // ALL SW Gates
+  var gates=s1.results||[];
+  h+='<div class="section-title">Stage 1 — Software Gates ('+(s1.flagged_count||0)+' flagged / '+gates.length+')</div>';
+  for(var i=0;i<gates.length;i++){
+    var g=gates[i];
+    var cls=g.flag?'fail':g.severity==='info'?'info':(g.detail||'').indexOf('[BG removal OFF')===0?'skip':'pass';
+    var tag=g.flag?' FLAGGED':g.severity==='info'?' (advisory)':(g.detail||'').indexOf('[BG removal OFF')===0?' (skipped)':' ✓';
+    var tagColor=g.flag?'var(--red)':g.severity==='info'?'var(--blue)':(g.detail||'').indexOf('[BG removal OFF')===0?'#bbb':'var(--green)';
+    h+='<div class="gate '+cls+'">';
+    h+='<span class="gate-id">'+esc(g.gate_id)+' — '+esc(g.name)+'</span>';
+    h+=' <span style="color:'+tagColor+';font-size:10px;font-weight:700">'+tag+'</span>';
+    h+='<div class="gate-detail">'+esc(g.detail||'')+'</div>';
+    h+='</div>';
+  }
+
+  // ALL VLM Checks
+  var checks=pa.checks||{};
+  var vlmMeta={
+    UP1_upscaling_integrity:'UP-1: Upscaling + Design Integrity',
+    BR1_bg_removal:'BR-1: BG Removal Quality',
+    ST1_semi_transparency:'ST-1: Semi-Transparency',
+    TL_VLM_thin_lines:'TL-VLM: Thin Lines'
+  };
+  var vlmKeys=Object.keys(vlmMeta);
+  var modelShort=(primary.split('/').pop()||'').replace(/-/g,' ');
+  h+='<div class="section-title">Stage 2 — VLM Analysis ('+esc(modelShort)+')</div>';
+
+  // VLM-only checks
+  h+='<div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">VLM-Only Checks</div>';
+  h+='<div class="vlm-grid">';
+  for(var i=0;i<vlmKeys.length;i++){
+    var k=vlmKeys[i];
+    var c=checks[k];
+    if(!c||typeof c!=='object'){
+      h+='<div class="vlm-card na"><h4>'+esc(vlmMeta[k])+'</h4><div style="color:#bbb">Not evaluated</div></div>';
+      continue;
+    }
+    var cls2=(c.status||'')==='pass'?'pass':'fail';
+    var findings=Array.isArray(c.findings)?c.findings:[];
+    h+='<div class="vlm-card '+cls2+'"><h4>'+esc(vlmMeta[k])+'</h4>';
+    h+='<div><b>'+esc((c.status||'?').toUpperCase())+'</b> · '+esc(c.severity||'none')+'</div>';
+    if(findings.length){
+      h+='<div style="margin-top:4px;color:var(--t2)">';
+      for(var j=0;j<findings.length;j++)h+='• '+esc(String(findings[j]))+'<br>';
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+  h+='</div>';
+
+  // VLM validation of every SW gate
+  var vals=pa.sw_gate_validations||{};
+  var gateDecisions=(fv.gate_decisions||{});
+  h+='<div style="font-size:11px;font-weight:700;color:var(--t3);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.3px">VLM Validation of SW Gates</div>';
+  for(var i=0;i<gates.length;i++){
+    var g=gates[i];
+    var gid=g.gate_id||'';
+    var vKey=gid.replace('-','');
+    var vl=vals[vKey]||{};
+    var gd=gateDecisions[gid]||{};
+    var decision=gd.decision||'';
+    var source=gd.source||'';
+
+    var cls3,statusText;
+    if(decision==='HARD_FAIL'){cls3='fail';statusText='HARD FAIL (no override)';}
+    else if(decision==='FAIL'){cls3='fail';statusText='SW flagged + VLM confirmed = FAIL';}
+    else if(source==='vlm_override'){cls3='pass';statusText='SW flagged → VLM OVERRIDDEN = PASS';}
+    else if(decision==='INFO'){cls3='info';statusText='Advisory only';}
+    else if(g.flag){cls3='fail';statusText='FLAGGED';}
+    else{cls3='pass';statusText='PASS';}
+
+    var reason=vl.reason||gd.reason||'';
+    h+='<div class="gate '+cls3+'" style="padding:6px 12px">';
+    h+='<span class="gate-id">'+esc(gid)+'</span> ';
+    h+='<span style="font-size:11px;font-weight:700;color:'+(cls3==='fail'?'var(--red)':cls3==='info'?'var(--blue)':'var(--green)')+'">'+statusText+'</span>';
+    if(vl.override){h+=' <span style="font-size:10px;color:var(--amber);font-weight:600">[VLM Override'+(vl.fp_code?' — '+esc(vl.fp_code):'')+']</span>';}
+    if(reason){h+='<div class="gate-detail">'+esc(reason)+'</div>';}
+    h+='</div>';
+  }
+
+  // Fix suggestions
+  var fixes=Array.isArray(pa.fix_suggestions)?pa.fix_suggestions:[];
+  if(fixes.length){
+    h+='<div class="section-title">Fix Suggestions</div><ul style="margin:0 0 0 16px;font-size:12px">';
+    for(var i=0;i<fixes.length;i++)h+='<li>'+esc(String(fixes[i]))+'</li>';
+    h+='</ul>';
+  }
+
+  // Report
+  if(d.report){
+    h+='<div class="section-title">Vendor Report</div>';
+    h+='<div class="report-box">'+esc(d.report)+'</div>';
+  }
+
+  // Vendor-only checks
+  var vc=d.vendor_only_checks||[];
+  if(vc.length){
+    h+='<div class="section-title">Vendor-Only Checks</div>';
+    for(var i=0;i<vc.length;i++){
+      h+='<div class="gate warn"><span class="gate-id">'+esc(vc[i].check||'')+'</span><div class="gate-detail">'+esc(vc[i].note||'')+'</div></div>';
+    }
+  }
+
+  // Model comparison table — SW gates + VLM checks + verdict
+  var modelKeys=models.filter(function(m){return mr[m]});
+  if(modelKeys.length>0){
+    h+='<div class="section-title">Model Comparison ('+modelKeys.length+')</div>';
+
+    // SW gate IDs for columns
+    var swGateIds=[];
+    for(var i=0;i<gates.length;i++)swGateIds.push(gates[i].gate_id);
+    var swKeyMap={'BG-1':'BG1','BG-2':'BG2','BG-3':'BG3','BG-4':'BG4','LR-1':'LR1','LR-2':'LR2','TL-1':'TL1','CS-1':'CS1','JE-1':'JE1','QR-1':'QR1'};
+    var swFullNames={'BG-1':'No Alpha Check','BG-2':'White BG Corners','BG-3':'Border Opacity','BG-4':'Ghost Pixels',
+      'LR-1':'DPI Check','LR-2':'Blur Detection','TL-1':'Thin Lines','CS-1':'CMYK Shift','JE-1':'Jagged Edges','QR-1':'QR Code'};
+
+    // VLM check keys
+    var vlmCols=[
+      {key:'UP1_upscaling_integrity',name:'Upscaling Integrity'},
+      {key:'BR1_bg_removal',name:'BG Removal Quality'},
+      {key:'ST1_semi_transparency',name:'Semi-Transparency'},
+      {key:'TL_VLM_thin_lines',name:'Thin Lines (VLM)'}
+    ];
+
+    h+='<div class="cmp-wrap"><table class="cmp"><tr><th style="text-align:left">Model</th>';
+    // SW gate headers
+    for(var i=0;i<swGateIds.length;i++){
+      h+='<th title="'+esc(swFullNames[swGateIds[i]]||swGateIds[i])+'">'+esc(swGateIds[i])+'</th>';
+    }
+    h+='<th style="border-left:2px solid var(--bd)"></th>';
+    // VLM check headers
+    for(var i=0;i<vlmCols.length;i++){
+      h+='<th>'+esc(vlmCols[i].name)+'</th>';
+    }
+    h+='<th>Verdict</th><th>Score</th><th>Time</th></tr>';
+
+    for(var mi=0;mi<modelKeys.length;mi++){
+      var m=modelKeys[mi],rv=mr[m]||{},av=rv.assessment||{},ch=av.checks||{};
+      var svl=av.sw_gate_validations||{};
+      var v=av.overall_verdict||'?',sc=av.print_readiness_score;
+      var short=(m.split('/').pop()||'').replace(/-/g,' ');
+
+      h+='<tr><td style="text-align:left;font-weight:600">'+esc(short);
+      if(rv.status==='error')h+=' <span style="color:var(--red);font-size:9px">ERR</span>';
+      h+='</td>';
+
+      // SW gate columns — show VLM's validation per gate
+      for(var si=0;si<swGateIds.length;si++){
+        var gid=swGateIds[si];
+        var vk=swKeyMap[gid]||gid.replace('-','');
+        var gv=svl[vk];
+        var gateObj=gates[si]||{};
+
+        if(rv.status==='error'){h+='<td><span class="dot e"></span></td>';continue}
+        if(gid==='CS-1'){h+='<td><span style="font-size:9px;color:var(--t3)">info</span></td>';continue}
+
+        if(gateObj.flag){
+          if(gv&&gv.override){
+            h+='<td title="SW flagged → VLM overrode"><span style="font-size:9px;color:var(--amber);font-weight:700">OVR</span></td>';
+          }else{
+            h+='<td><span class="dot f"></span></td>';
+          }
+        }else{
+          h+='<td><span class="dot p"></span></td>';
+        }
+      }
+
+      // Separator
+      h+='<td style="border-left:2px solid var(--bd)"></td>';
+
+      // VLM check columns
+      for(var ci=0;ci<vlmCols.length;ci++){
+        var cc=ch[vlmCols[ci].key];
+        if(!cc||typeof cc!=='object'){h+='<td><span class="dot e"></span></td>';continue}
+        h+='<td><span class="dot '+((cc.status||'')==='pass'?'p':'f')+'"></span></td>';
+      }
+
+      var vc2=v==='PASS'?'var(--green)':v==='FAIL'?'var(--red)':'var(--t3)';
+      h+='<td style="font-weight:700;color:'+vc2+'">'+esc(v)+'</td>';
+      h+='<td style="font-weight:700">'+(typeof sc==='number'?sc:'—')+'</td>';
+      h+='<td style="font-size:10px;color:var(--t3)">'+(rv.latency_ms?Math.round(rv.latency_ms)+'ms':'—')+'</td></tr>';
+    }
+    h+='</table></div>';
+    h+='<div style="font-size:10px;color:var(--t3);margin-top:4px">● = pass &nbsp; ● = fail &nbsp; <span style="color:var(--amber);font-weight:700">OVR</span> = SW flagged but VLM overrode &nbsp; ● = not evaluated</div>';
+  }
+
+  // Performance
+  h+='<div class="perf">';
+  h+='<span>SW Gates: <b>'+(perf.stage1_ms||'?')+'ms</b></span>';
+  h+='<span>BG: <b>'+(perf.bg_removal_ms||'—')+'ms</b></span>';
+  h+='<span>Total: <b>'+(perf.total_pipeline_ms||'?')+'ms</b></span>';
+  h+='<span>'+esc((info.width_px||'?')+'×'+(info.height_px||'?'))+' · '+esc(info.mode||'')+'</span>';
+  h+='</div>';
+
+  // JSON
+  h+='<div class="json-btn" onclick="this.nextElementSibling.classList.toggle(\'show\')">▸ Raw JSON</div>';
+  h+='<div class="json-box">'+esc(JSON.stringify(d,null,2))+'</div>';
+
+  var res=document.getElementById('results');
+  res.innerHTML=h;
+  res.classList.add('show');
+  res.scrollIntoView({behavior:'smooth'});
+}
+
+function esc(s){return s==null?'':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+</script>
+</body>
+</html>

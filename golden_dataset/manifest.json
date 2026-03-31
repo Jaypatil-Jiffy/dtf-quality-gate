@@ -1,0 +1,441 @@
+[
+  {
+    "row": 63,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: poor quality",
+    "description": "Low resolution, pixelation visible in artwork",
+    "comment": "The letter look and fuzzy not clean and sharp like my other two designs",
+    "images": {
+      "original": "golden_dataset/row63_original_103.png",
+      "checkout": "golden_dataset/row63_checkout_104.png",
+      "claim": "golden_dataset/row63_claim_105.png"
+    }
+  },
+  {
+    "row": 64,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: poor quality",
+    "description": "Low resolution, pixelation visible in artwork",
+    "comment": "I received the DTF transfers but not the stickers on the order? Also the DTF transfers quality of the DELCO lacrosse club could be a little sharper on the bottom. The L in Delco and the two lacrosse sticks did not come out. I\u2019ve attached a photo.",
+    "images": {
+      "original": "golden_dataset/row64_original_106.png",
+      "checkout": "golden_dataset/row64_checkout_107.png",
+      "claim": "golden_dataset/row64_claim_108.png"
+    }
+  },
+  {
+    "row": 65,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: poor quality",
+    "description": "Low resolution, pixelation visible in artwork",
+    "comment": "",
+    "images": {
+      "original": "golden_dataset/row65_original_109.png",
+      "checkout": "golden_dataset/row65_checkout_110.png",
+      "claim": "golden_dataset/row65_claim_111.png"
+    }
+  },
+  {
+    "row": 67,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: semi-transparent effects",
+    "description": "Transparency artifacts visible in processed image",
+    "comment": "Is Shows white gray and brown after pressed when viewed before buying didn't look like it at all",
+    "images": {
+      "original": "golden_dataset/row67_original_112.png",
+      "checkout": "golden_dataset/row67_checkout_113.png",
+      "claim": "golden_dataset/row67_claim_114.png"
+    }
+  },
+  {
+    "row": 68,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: semi-transparent effects",
+    "description": "Transparency artifacts visible in processed image",
+    "comment": "The bottom image doesn\u2019t have enough backing causing it to not adhere",
+    "images": {
+      "original": "golden_dataset/row68_original_115.png",
+      "checkout": "golden_dataset/row68_checkout_116.png",
+      "claim": "golden_dataset/row68_claim_117.png"
+    }
+  },
+  {
+    "row": 69,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: semi-transparent effects",
+    "description": "Transparency artifacts visible in processed image",
+    "comment": "Just redue",
+    "images": {
+      "original": "golden_dataset/row69_original_118.png",
+      "checkout": "golden_dataset/row69_checkout_119.png",
+      "claim": "golden_dataset/row69_claim_120.png"
+    }
+  },
+  {
+    "row": 71,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: thin lines",
+    "description": "Thin lines lost or degraded in image comparison",
+    "comment": "The yellow line didnt press to the shirt except for the 2 little spots that are white and textured. The design looks right but the yellow isnt going to press like the rest of the design and now the crewneck is defective",
+    "images": {
+      "original": "golden_dataset/row71_original_121.png",
+      "checkout": "golden_dataset/row71_checkout_122.png",
+      "claim": "golden_dataset/row71_claim_123.png"
+    }
+  },
+  {
+    "row": 72,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: thin lines",
+    "description": "Thin lines lost or degraded in image comparison",
+    "comment": "When I go to press this item it will not come off correctly",
+    "images": {
+      "original": "golden_dataset/row72_original_124.png",
+      "checkout": "golden_dataset/row72_checkout_125.png",
+      "claim": "golden_dataset/row72_claim_126.png"
+    }
+  },
+  {
+    "row": 73,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: thin lines",
+    "description": "Thin lines lost or degraded in image comparison",
+    "comment": "Same issue I always have, no powder on the film in some areas.",
+    "images": {
+      "original": "golden_dataset/row73_original_127.png",
+      "checkout": "golden_dataset/row73_checkout_128.png",
+      "claim": "golden_dataset/row73_claim_129.png"
+    }
+  },
+  {
+    "row": 75,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: RGB to CMYK",
+    "description": "Color shift from RGB to CMYK visible in comparison",
+    "comment": "Completely wrong color despite putting in the notes to make sure the color is accurate. When pressed it was actually gray rather than the electric blue we uploaded.",
+    "images": {
+      "original": "golden_dataset/row75_original_130.png",
+      "checkout": "golden_dataset/row75_checkout_131.png",
+      "claim": "golden_dataset/row75_claim_132.png"
+    }
+  },
+  {
+    "row": 76,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: RGB to CMYK",
+    "description": "Color shift from RGB to CMYK visible in comparison",
+    "comment": "The green color isn\u2019t even remotely the same. All Coloring off and the yellows aren\u2019t the same. All of these are printed wrong colors I would like store credit so I can order again",
+    "images": {
+      "original": "golden_dataset/row76_original_133.png",
+      "checkout": "golden_dataset/row76_checkout_134.png",
+      "claim": "golden_dataset/row76_claim_135.png"
+    }
+  },
+  {
+    "row": 77,
+    "category": "IMAGE",
+    "subcategory": "Artwork issue: RGB to CMYK",
+    "description": "Color shift from RGB to CMYK visible in comparison",
+    "comment": "Color on the background. Does not look like my uploaded photo",
+    "images": {
+      "original": "golden_dataset/row77_original_136.png",
+      "checkout": "golden_dataset/row77_checkout_137.png",
+      "claim": "golden_dataset/row77_claim_138.png"
+    }
+  },
+  {
+    "row": 79,
+    "category": "IMAGE",
+    "subcategory": "Background Removal",
+    "description": "BG removal errors: halos, remnants, cutoffs",
+    "comment": "The L in Michael Jordan was removed from my print",
+    "images": {
+      "original": "golden_dataset/row79_original_139.png",
+      "checkout": "golden_dataset/row79_checkout_140.png",
+      "claim": "golden_dataset/row79_claim_141.png"
+    }
+  },
+  {
+    "row": 80,
+    "category": "IMAGE",
+    "subcategory": "Background Removal",
+    "description": "BG removal errors: halos, remnants, cutoffs",
+    "comment": "I received my transfers and they came in with a white background being behind the tree on my logo that should have been transparent.",
+    "images": {
+      "original": "golden_dataset/row80_original_142.png",
+      "checkout": "golden_dataset/row80_checkout_143.png",
+      "claim": "golden_dataset/row80_claim_144.png"
+    }
+  },
+  {
+    "row": 81,
+    "category": "IMAGE",
+    "subcategory": "Background Removal",
+    "description": "BG removal errors: halos, remnants, cutoffs",
+    "comment": "I was just now able to open my box and check my transfers. The large logo for Phillips plumbing that had the phone number on it in baby blue-the number 1 in the area code is messed up on all of them. Also, there is some sort of black shading in the white pipes on all of the large ones.",
+    "images": {
+      "original": "golden_dataset/row81_original_145.png",
+      "checkout": "golden_dataset/row81_checkout_146.png",
+      "claim": "golden_dataset/row81_claim_147.png"
+    }
+  },
+  {
+    "row": 83,
+    "category": "IMAGE",
+    "subcategory": "Trimming/Sizing",
+    "description": "Trimming or sizing errors visible in processed image",
+    "comment": "The back prints I ordered in the 10 in and 12in did not show they would be stretched out of proportion! The logo is stretched and is not correct, please let me know what can be done as I am needing these for a company and that is unacceptable!",
+    "images": {
+      "original": "golden_dataset/row83_original_148.png",
+      "checkout": "golden_dataset/row83_checkout_149.png",
+      "claim": "golden_dataset/row83_claim_150.png"
+    }
+  },
+  {
+    "row": 84,
+    "category": "IMAGE",
+    "subcategory": "Trimming/Sizing",
+    "description": "Trimming or sizing errors visible in processed image",
+    "comment": "Should I be nervous that the print previews are different sizes but I have the same size if that makes sense.",
+    "images": {
+      "original": "golden_dataset/row84_original_151.png",
+      "checkout": "golden_dataset/row84_checkout_152.png",
+      "claim": "golden_dataset/row84_claim_153.png"
+    }
+  },
+  {
+    "row": 85,
+    "category": "IMAGE",
+    "subcategory": "Trimming/Sizing",
+    "description": "Trimming or sizing errors visible in processed image",
+    "comment": "The color still looks a little off....i'm attaching two files of it....take a look please and let me know what you think.  Thanks.  Also please make sure they dont make the shape oval....the logo is a circle.....i never had this problem in the past when i ordered this exact logo before. thanks",
+    "images": {
+      "original": "golden_dataset/row85_original_154.png",
+      "checkout": "golden_dataset/row85_checkout_155.png",
+      "claim": "golden_dataset/row85_claim_156.png"
+    }
+  },
+  {
+    "row": 87,
+    "category": "IMAGE",
+    "subcategory": "Upscaling/Vectorization Issue",
+    "description": "Upscaling artifacts or vectorization errors visible",
+    "comment": "I was just now able to open my box and check my transfers. The large logo for Phillips plumbing that had the phone number on it in baby blue-the number 1 in the area code is messed up on all of them. Also, there is some sort of black shading in the white pipes on all of the large ones.",
+    "images": {
+      "original": "golden_dataset/row87_original_157.png",
+      "checkout": "golden_dataset/row87_checkout_158.png",
+      "claim": "golden_dataset/row87_claim_159.png"
+    }
+  },
+  {
+    "row": 88,
+    "category": "IMAGE",
+    "subcategory": "Upscaling/Vectorization Issue",
+    "description": "Upscaling artifacts or vectorization errors visible",
+    "comment": "The L in Michael Jordan was removed from my print",
+    "images": {
+      "original": "golden_dataset/row88_original_160.png",
+      "checkout": "golden_dataset/row88_checkout_161.png",
+      "claim": "golden_dataset/row88_claim_162.png"
+    }
+  },
+  {
+    "row": 89,
+    "category": "IMAGE",
+    "subcategory": "Upscaling/Vectorization Issue",
+    "description": "Upscaling artifacts or vectorization errors visible",
+    "comment": "The black legacy project prints have black ink smudges on the red part of the flag. On every single one of them which is 66 prints total. Why isn't there quality inspection process before these orders are shipped out?",
+    "images": {
+      "original": "golden_dataset/row89_original_163.png",
+      "checkout": "golden_dataset/row89_checkout_164.png",
+      "claim": "golden_dataset/row89_claim_165.png"
+    }
+  },
+  {
+    "row": 92,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Redraw error: wrong image uploaded",
+    "description": "Mismatch between customer artwork and redraw output",
+    "comment": "",
+    "images": {
+      "original": "golden_dataset/row92_original_169.png",
+      "checkout": "golden_dataset/row92_checkout_170.png"
+    }
+  },
+  {
+    "row": 93,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Redraw error: wrong image uploaded",
+    "description": "Mismatch between customer artwork and redraw output",
+    "comment": "",
+    "images": {
+      "original": "golden_dataset/row93_original_171.png",
+      "checkout": "golden_dataset/row93_checkout_172.png"
+    }
+  },
+  {
+    "row": 95,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Redraw error: instructions not followed",
+    "description": "Redraw output doesn't match instructions",
+    "comment": "Remove the black rectangular background. Leave the cat black and outlined in white as pictured. FERRUM in white and SOFTBALL in gold color as pictured.",
+    "images": {
+      "original": "golden_dataset/row95_original_173.png",
+      "checkout": "golden_dataset/row95_checkout_174.png"
+    }
+  },
+  {
+    "row": 96,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Redraw error: instructions not followed",
+    "description": "Redraw output doesn't match instructions",
+    "comment": "Replacement: Please add the name \"Blythe\" in Bold, Black, Magnolia Sky font. Please ensure only the first letter in the name is capitalized, and the rest of the name is lower case",
+    "images": {
+      "original": "golden_dataset/row96_original_175.png",
+      "checkout": "golden_dataset/row96_checkout_176.png"
+    }
+  },
+  {
+    "row": 97,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Redraw error: instructions not followed",
+    "description": "Redraw output doesn't match instructions",
+    "comment": "make image not blurry",
+    "images": {
+      "original": "golden_dataset/row97_original_177.png",
+      "checkout": "golden_dataset/row97_checkout_178.png",
+      "claim": "golden_dataset/row97_claim_179.png"
+    }
+  },
+  {
+    "row": 99,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Redraw error: guidelines not met",
+    "description": "Guideline violations visible in redraw output",
+    "comment": "Please ensure all edges are clean and smooth",
+    "images": {
+      "original": "golden_dataset/row99_original_180.png",
+      "checkout": "golden_dataset/row99_checkout_181.png"
+    }
+  },
+  {
+    "row": 100,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Redraw error: guidelines not met",
+    "description": "Guideline violations visible in redraw output",
+    "comment": "Change words from black to white and both bows from red to hot pink",
+    "images": {
+      "original": "golden_dataset/row100_original_182.png",
+      "checkout": "golden_dataset/row100_checkout_183.png"
+    }
+  },
+  {
+    "row": 101,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Redraw error: guidelines not met",
+    "description": "Guideline violations visible in redraw output",
+    "comment": "(Audit comment) Please improve overall clarity and quality. Please optimize for 300dpi.",
+    "images": {
+      "original": "golden_dataset/row101_original_184.png",
+      "checkout": "golden_dataset/row101_checkout_185.png"
+    }
+  },
+  {
+    "row": 103,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Audit error: should have been rejected",
+    "description": "Quality issue that should have been caught",
+    "comment": "Damaged/defective items report for order 981177318\nhttps://www.jiffy.com/admin/orders/981177318/cart\n\nThis is printer initiated claim\nView Claim Here: https://www.jiffy.com/admin/request/claims/2282652/reorder\n\nCategory: Application Error\n\nSubcategory: Defective Transfer Applied\n\nSuppliers\nFast Dtf\n",
+    "images": {
+      "claim": "golden_dataset/row103_claim_186.png"
+    }
+  },
+  {
+    "row": 104,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Audit error: should have been rejected",
+    "description": "Quality issue that should have been caught",
+    "comment": "Damaged/defective items report for order 983420146\nhttps://www.jiffy.com/admin/orders/983420146/cart\n\nThis is printer initiated claim\nView Claim Here: https://www.jiffy.com/admin/request/claims/2268577/reorder\n\nCategory: Application Error\n\nSubcategory: Defective Transfer Applied\n\nSuppliers\nUnreal Cu",
+    "images": {
+      "claim": "golden_dataset/row104_claim_187.png"
+    }
+  },
+  {
+    "row": 105,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Audit error: should have been rejected",
+    "description": "Quality issue that should have been caught",
+    "comment": "IMAGE IS BLURRY AND GRAINY. I gave iINSTRUCTION to rREMOVE BLUR and make CRISP and CLEAN. I need replacements expedited next day. I MUST receive by FRIDAY MARCH 13. Please CALL 626428-2859 with questions.",
+    "images": {
+      "checkout": "golden_dataset/row105_checkout_188.png",
+      "claim": "golden_dataset/row105_claim_189.png"
+    }
+  },
+  {
+    "row": 107,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Audit error: should have been approved",
+    "description": "Acceptable quality incorrectly rejected",
+    "comment": "Rejected on customer feedback/proofing stage for thin lines after processing the first time.",
+    "images": {
+      "original": "golden_dataset/row107_original_190.png",
+      "checkout": "golden_dataset/row107_checkout_191.png"
+    }
+  },
+  {
+    "row": 108,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Audit error: should have been approved",
+    "description": "Acceptable quality incorrectly rejected",
+    "comment": "A completely different image on the order did have multiple output requests, however this image did not. \n\"please remove background. should just be orange logo with nothing behind it\"",
+    "images": {
+      "original": "golden_dataset/row108_original_192.png"
+    }
+  },
+  {
+    "row": 109,
+    "category": "REDRAW/VENDOR",
+    "subcategory": "Audit error: should have been approved",
+    "description": "Acceptable quality incorrectly rejected",
+    "comment": "The text in design is supposed to be blurry. Please print. Have had you guys make this file multiple times now just want to make sure. THANKS",
+    "images": {
+      "original": "golden_dataset/row109_original_193.png"
+    }
+  },
+  {
+    "row": 273,
+    "category": "IMAGE",
+    "subcategory": "Printer Assignment",
+    "description": "Could involve image routing but primarily system/assignment issue",
+    "comment": "Idk why I have to do this again I filled this out once already and I have not got an email that you were looking into stuff. The customer said the red is a red orange in these it should be a red, when there were ordered all tha was changed from the first order was the size of the images yet you chan",
+    "images": {
+      "original": "golden_dataset/row273_original_217.png",
+      "checkout": "golden_dataset/row273_checkout_218.png",
+      "claim": "golden_dataset/row273_claim_219.png"
+    }
+  },
+  {
+    "row": 274,
+    "category": "IMAGE",
+    "subcategory": "Printer Assignment",
+    "description": "Could involve image routing but primarily system/assignment issue",
+    "comment": "Good afternoon-\nAfter comparing multiple print plants' delivered product from Jiffy, I selected the one that most closely matched the color of my artwork, and requested that all of my orders be printed at the Streamwood plant.\nI was assured that my account was updated with this information.\nThe last",
+    "images": {
+      "original": "golden_dataset/row274_original_220.png",
+      "checkout": "golden_dataset/row274_checkout_221.png",
+      "claim": "golden_dataset/row274_claim_222.png"
+    }
+  },
+  {
+    "row": 275,
+    "category": "IMAGE",
+    "subcategory": "Printer Assignment",
+    "description": "Could involve image routing but primarily system/assignment issue",
+    "comment": "Color is red instead of maroon on t-shirts.",
+    "images": {
+      "original": "golden_dataset/row275_original_223.png",
+      "checkout": "golden_dataset/row275_checkout_224.png",
+      "claim": "golden_dataset/row275_claim_225.png"
+    }
+  }
+]

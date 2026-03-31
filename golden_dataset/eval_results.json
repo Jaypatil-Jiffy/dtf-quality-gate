@@ -1,0 +1,566 @@
+{
+  "model": "google/gemini-2.5-flash",
+  "results": [
+    {
+      "row": 63,
+      "subcategory": "Artwork issue: poor quality",
+      "comment": "The letter look and fuzzy not clean and sharp like my other two designs",
+      "verdict": "PASS",
+      "caught": false,
+      "sw_caught": true,
+      "vlm_caught": false,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "pass"
+      },
+      "reasons": [],
+      "elapsed_s": 65.1,
+      "vlm_score": 90
+    },
+    {
+      "row": 64,
+      "subcategory": "Artwork issue: poor quality",
+      "comment": "I received the DTF transfers but not the stickers on the order? Also the DTF transfers quality of the DELCO lacrosse club could be a little sharper on",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": true,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "fail",
+        "BR1_bg_removal": "fail",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The software correctly flagged thin lines. While the original design had thin elements (state outline, small text), the processed image's remaining small 'DELCO' text still exhibits thin line issues, and the overall design integrity is severely compromised.",
+        "UP-1: Upscaling/Design Integrity: Significant corruption and removal of design elements. The processed image only retains parts of 'DELCO' and the small '",
+        "BR-1: BG Removal Quality: The background removal process has incorrectly identified significant portions of the design as background and removed t",
+        "TL-VLM: Thin Lines/Fine Detail: The small 'DELCO' text in the processed image appears to have very thin strokes, particularly around the 'D' and 'E', wh"
+      ],
+      "elapsed_s": 24.6,
+      "vlm_score": 20
+    },
+    {
+      "row": 65,
+      "subcategory": "Artwork issue: poor quality",
+      "comment": "",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": false,
+      "vlm_caught": false,
+      "sw_flagged": [
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The software flag TL-1 correctly identified numerous isolated thin strokes. These are indeed problematic for DTF printing as they are too fine to hold adhesive powder and will likely not transfer or will crumble.",
+        "TL-VLM: Thin Lines/Fine Detail: The thin white outlines around the 'KNOCH' text and the 'WPIAL TEAM 2026' text are extremely thin and isolated from the "
+      ],
+      "elapsed_s": 93.5,
+      "vlm_score": 30
+    },
+    {
+      "row": 67,
+      "subcategory": "Artwork issue: semi-transparent effects",
+      "comment": "Is Shows white gray and brown after pressed when viewed before buying didn't look like it at all",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": false,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "fail",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The software gate correctly identified thin lines. These are indeed problematic for DTF printing due to the nature of the script font and the glow effects.",
+        "ST-1: Semi-Transparency: The design features extensive semi-transparent glow and smoke effects around the text and the ribbon. These elements wil",
+        "TL-VLM: Thin Lines/Fine Detail: The script font used for 'You Fought', 'I Run', and the names contains numerous very thin strokes, particularly in the f"
+      ],
+      "elapsed_s": 130.3,
+      "vlm_score": 20
+    },
+    {
+      "row": 68,
+      "subcategory": "Artwork issue: semi-transparent effects",
+      "comment": "The bottom image doesn\u2019t have enough backing causing it to not adhere",
+      "verdict": "PASS",
+      "caught": false,
+      "sw_caught": false,
+      "vlm_caught": false,
+      "sw_flagged": [
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "pass"
+      },
+      "reasons": [],
+      "elapsed_s": 30.3,
+      "vlm_score": 90
+    },
+    {
+      "row": 69,
+      "subcategory": "Artwork issue: semi-transparent effects",
+      "comment": "Just redue",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": false,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "fail",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The software correctly identified numerous thin lines. These are indeed problematic for DTF printing as they are isolated and very fine, making them prone to transfer failure.",
+        "ST-1: Semi-Transparency: The musical notes and the 'Voice & Worship Team' text have a subtle blue glow/shadow effect that fades into transparency",
+        "TL-VLM: Thin Lines/Fine Detail: Numerous small, isolated musical notes are very thin and surrounded by transparency. Many of these appear to be less tha"
+      ],
+      "elapsed_s": 65.0,
+      "vlm_score": 20
+    },
+    {
+      "row": 71,
+      "subcategory": "Artwork issue: thin lines",
+      "comment": "The yellow line didnt press to the shirt except for the 2 little spots that are white and textured. The design looks right but the yellow isnt going t",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": true,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "fail",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The software gate correctly identified numerous thin strokes. VLM confirms these are problematic isolated elements that will not transfer well.",
+        "ST-1: Semi-Transparency: The design contains several elements with intentional semi-transparency, particularly in the leaves, the wheat stalks, a",
+        "TL-VLM: Thin Lines/Fine Detail: The thin, wispy elements of the wheat stalks, the delicate leaves, and the fine lines in the text 'From the Grove to you"
+      ],
+      "elapsed_s": 58.9,
+      "vlm_score": 40
+    },
+    {
+      "row": 72,
+      "subcategory": "Artwork issue: thin lines",
+      "comment": "When I go to press this item it will not come off correctly",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": true,
+      "vlm_caught": false,
+      "sw_flagged": [
+        "LR-1",
+        "LR-2",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "fail",
+        "BR1_bg_removal": "fail",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "pass"
+      },
+      "reasons": [
+        "LR-1: DPI below 72 \u2014 hard block, no VLM override",
+        "UP-1: Upscaling/Design Integrity: The processed image is completely black, indicating a total loss of the original design during processing. The original ",
+        "BR-1: BG Removal Quality: The entire design has been removed, resulting in a completely black, empty image. This is an extreme case of over-remova"
+      ],
+      "elapsed_s": 10.3,
+      "vlm_score": 10
+    },
+    {
+      "row": 73,
+      "subcategory": "Artwork issue: thin lines",
+      "comment": "Same issue I always have, no powder on the film in some areas.",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": true,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The software gate correctly identified thin lines. These are integral to the design and will likely fail to transfer, leading to customer dissatisfaction.",
+        "TL-VLM: Thin Lines/Fine Detail: The intricate script font contains numerous very thin strokes and flourishes, particularly in the 'S', 'm', 'u', 'n', 'y"
+      ],
+      "elapsed_s": 38.4,
+      "vlm_score": 40
+    },
+    {
+      "row": 75,
+      "subcategory": "Artwork issue: RGB to CMYK",
+      "comment": "Completely wrong color despite putting in the notes to make sure the color is accurate. When pressed it was actually gray rather than the electric blu",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": false,
+      "vlm_caught": null,
+      "sw_flagged": [
+        "LR-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "fail",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "pass"
+      },
+      "reasons": [
+        "LR-1: DPI below 72 \u2014 hard block, no VLM override",
+        "BR-1: BG Removal Quality: The processed image shows a faint, dark halo around the edges of the number '1' that was not present in the original. Th"
+      ],
+      "elapsed_s": 36.9,
+      "vlm_score": 40
+    },
+    {
+      "row": 76,
+      "subcategory": "Artwork issue: RGB to CMYK",
+      "comment": "The green color isn\u2019t even remotely the same. All Coloring off and the yellows aren\u2019t the same. All of these are printed wrong colors I would like sto",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": false,
+      "vlm_caught": null,
+      "sw_flagged": [
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "fail",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The flagged thin lines are indeed problematic for DTF printing and are not intended to be ignored as part of the design style in a way that would make them transfer successfully.",
+        "ST-1: Semi-Transparency: The neon star elements in the design feature significant semi-transparent glow effects. These will print as a solid whit",
+        "TL-VLM: Thin Lines/Fine Detail: The thin black outlines around the sprinkles on the pink and blue elements, as well as the thin black outlines on the ye"
+      ],
+      "elapsed_s": 18.3,
+      "vlm_score": 40
+    },
+    {
+      "row": 77,
+      "subcategory": "Artwork issue: RGB to CMYK",
+      "comment": "Color on the background. Does not look like my uploaded photo",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": false,
+      "vlm_caught": null,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "fail",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "LR-1: DPI below 72 \u2014 hard block, no VLM override",
+        "TL-1: SW flagged + VLM confirmed \u2014 The TL-1 flag correctly identifies numerous thin lines that are part of the design and will likely fail to transfer. This is not a false positive.",
+        "ST-1: Semi-Transparency: The design contains numerous elements with semi-transparent edges and glows, particularly around the 'IRISH IRON' text, ",
+        "TL-VLM: Thin Lines/Fine Detail: The green outline around the 'IRISH IRON' text is very thin and appears to be less than 2 pixels wide in many areas. The"
+      ],
+      "elapsed_s": 17.6,
+      "vlm_score": 20
+    },
+    {
+      "row": 79,
+      "subcategory": "Background Removal",
+      "comment": "The L in Michael Jordan was removed from my print",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": false,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "fail",
+        "BR1_bg_removal": "fail",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "LR-1: DPI below 72 \u2014 hard block, no VLM override",
+        "TL-1: SW flagged + VLM confirmed \u2014 The software correctly identified thin lines. The VLM analysis confirms these are problematic due to their isolated nature and extreme thinness after processing.",
+        "UP-1: Upscaling/Design Integrity: The processed image shows significant pixelation and distortion, especially in the text elements and the basketball illu",
+        "BR-1: BG Removal Quality: The processed image retains a significant amount of the original black background, particularly around the edges of the ",
+        "TL-VLM: Thin Lines/Fine Detail: Many of the individual letters scattered around the basketball, especially those in green and red, are very thin and iso"
+      ],
+      "elapsed_s": 6.8,
+      "vlm_score": 10
+    },
+    {
+      "row": 80,
+      "subcategory": "Background Removal",
+      "comment": "I received my transfers and they came in with a white background being behind the tree on my logo that should have been transparent.",
+      "verdict": "PASS",
+      "caught": false,
+      "sw_caught": false,
+      "vlm_caught": false,
+      "sw_flagged": [
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "pass"
+      },
+      "reasons": [],
+      "elapsed_s": 41.9,
+      "vlm_score": 90
+    },
+    {
+      "row": 81,
+      "subcategory": "Background Removal",
+      "comment": "I was just now able to open my box and check my transfers. The large logo for Phillips plumbing that had the phone number on it in baby blue-the numbe",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": false,
+      "vlm_caught": false,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "fail",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "LR-1: DPI below 72 \u2014 hard block, no VLM override",
+        "TL-1: SW flagged + VLM confirmed \u2014 The thin lines are indeed problematic for DTF printing and are not merely part of the customer's design intent that can be ignored for printability.",
+        "UP-1: Upscaling/Design Integrity: Text in 'PHILLIPS PLUMBING' and 'Billy Phillips (615) 970-2587' shows significant pixelation and color fringing/corrupti",
+        "TL-VLM: Thin Lines/Fine Detail: The thin lines within the pipe design (e.g., the vertical lines inside the 'S' shapes) are extremely thin and may not ho"
+      ],
+      "elapsed_s": 6.1,
+      "vlm_score": 20
+    },
+    {
+      "row": 83,
+      "subcategory": "Trimming/Sizing",
+      "comment": "The back prints I ordered in the 10 in and 12in did not show they would be stretched out of proportion! The logo is stretched and is not correct, plea",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": null,
+      "vlm_caught": false,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The software correctly identified thin lines. The VLM confirms these are problematic for DTF printing due to their isolated nature and extreme thinness.",
+        "TL-VLM: Thin Lines/Fine Detail: The 'R' symbol (registered trademark) is extremely thin and isolated from the main design. It is likely to crumble or no"
+      ],
+      "elapsed_s": 11.3,
+      "vlm_score": 40
+    },
+    {
+      "row": 84,
+      "subcategory": "Trimming/Sizing",
+      "comment": "Should I be nervous that the print previews are different sizes but I have the same size if that makes sense.",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": null,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-2",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "fail",
+        "BR1_bg_removal": "fail",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "pass"
+      },
+      "reasons": [
+        "UP-1: Upscaling/Design Integrity: The processed image is completely black, indicating that the entire design from the original image has been removed or l",
+        "BR-1: BG Removal Quality: The background removal process has incorrectly removed the entire foreground design, resulting in a completely black ima"
+      ],
+      "elapsed_s": 26.4,
+      "vlm_score": 20
+    },
+    {
+      "row": 85,
+      "subcategory": "Trimming/Sizing",
+      "comment": "The color still looks a little off....i'm attaching two files of it....take a look please and let me know what you think.  Thanks.  Also please make s",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": null,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "fail",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The thin lines are part of the original design, but the processing has exacerbated their fragility and introduced corruption, making them a critical print failure point.",
+        "UP-1: Upscaling/Design Integrity: The processed image shows significant corruption, particularly in the text and the gradient areas. There are pixelated a",
+        "TL-VLM: Thin Lines/Fine Detail: The intricate decorative lines, especially the inner and outer borders of the circular emblem, and the horizontal lines "
+      ],
+      "elapsed_s": 17.2,
+      "vlm_score": 20
+    },
+    {
+      "row": 87,
+      "subcategory": "Upscaling/Vectorization Issue",
+      "comment": "I was just now able to open my box and check my transfers. The large logo for Phillips plumbing that had the phone number on it in baby blue-the numbe",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": null,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "fail",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "LR-1: DPI below 72 \u2014 hard block, no VLM override",
+        "TL-1: SW flagged + VLM confirmed \u2014 The software gate correctly identified thin lines that are problematic for DTF printing. These are not merely 'part of the design' but are physically too thin to transfer reliably.",
+        "UP-1: Upscaling/Design Integrity: Text in 'PHILLIPS PLUMBING' and 'Billy Phillips (615) 970-2587' shows significant pixelation and color fringing (red/blu",
+        "TL-VLM: Thin Lines/Fine Detail: The thin lines within the pipe design (the vertical lines inside the 'S' shapes and the horizontal lines connecting them"
+      ],
+      "elapsed_s": 11.1,
+      "vlm_score": 20
+    },
+    {
+      "row": 88,
+      "subcategory": "Upscaling/Vectorization Issue",
+      "comment": "The L in Michael Jordan was removed from my print",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": null,
+      "vlm_caught": true,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "fail",
+        "BR1_bg_removal": "fail",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "LR-1: DPI below 72 \u2014 hard block, no VLM override",
+        "TL-1: SW flagged + VLM confirmed \u2014 The software correctly identified thin lines. The VLM confirms these are problematic due to the severe distortion and fragmentation of the basketball lines and small text.",
+        "UP-1: Upscaling/Design Integrity: The processed image shows significant pixelation and distortion, especially in the smaller text elements and the basketb",
+        "BR-1: BG Removal Quality: The background removal process has introduced significant artifacts. Many of the colored letters that were originally on",
+        "TL-VLM: Thin Lines/Fine Detail: The lines forming the basketball in the processed image are very thin and broken in many places, making them highly susc"
+      ],
+      "elapsed_s": 6.3,
+      "vlm_score": 20
+    },
+    {
+      "row": 89,
+      "subcategory": "Upscaling/Vectorization Issue",
+      "comment": "The black legacy project prints have black ink smudges on the red part of the flag. On every single one of them which is 66 prints total. Why isn't th",
+      "verdict": "FAIL",
+      "caught": true,
+      "sw_caught": null,
+      "vlm_caught": false,
+      "sw_flagged": [
+        "LR-1",
+        "TL-1"
+      ],
+      "vlm_checks": {
+        "UP1_upscaling_integrity": "pass",
+        "BR1_bg_removal": "pass",
+        "ST1_semi_transparency": "pass",
+        "TL_VLM_thin_lines": "fail"
+      },
+      "reasons": [
+        "TL-1: SW flagged + VLM confirmed \u2014 The software gate correctly identified thin lines that are problematic for DTF printing. These are not merely 'part of the design' in a way that makes them printable; they are physically too thin to transfer reliably.",
+        "TL-VLM: Thin Lines/Fine Detail: The feather quill design contains very thin lines, particularly in the fletching and the tip, that are isolated from the"
+      ],
+      "elapsed_s": 48.9,
+      "vlm_score": 40
+    }
+  ],
+  "summary": {
+    "Artwork issue: poor quality": {
+      "total": 3,
+      "caught": 2
+    },
+    "Artwork issue: semi-transparent effects": {
+      "total": 3,
+      "caught": 2
+    },
+    "Artwork issue: thin lines": {
+      "total": 3,
+      "caught": 3
+    },
+    "Artwork issue: RGB to CMYK": {
+      "total": 3,
+      "caught": 3
+    },
+    "Background Removal": {
+      "total": 3,
+      "caught": 2
+    },
+    "Trimming/Sizing": {
+      "total": 3,
+      "caught": 3
+    },
+    "Upscaling/Vectorization Issue": {
+      "total": 3,
+      "caught": 3
+    }
+  }
+}
